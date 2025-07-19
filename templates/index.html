@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Chess - A Gift for My Heart</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffa8a8);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.3);
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            color: #6c757d;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #495057;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ffc0cb;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #ff6b6b;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .love-message {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .features {
+            text-align: left;
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 182, 193, 0.2);
+            border-radius: 15px;
+        }
+
+        .features h3 {
+            color: #d63384;
+            margin-bottom: 15px;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            padding: 5px 0;
+            color: #495057;
+        }
+
+        .features li:before {
+            content: "💕 ";
+            margin-right: 10px;
+        }
+
+        .game-mode {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+
+        .mode-btn {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid #ff6b6b;
+            color: #d63384;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .mode-btn:hover,
+        .mode-btn.active {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .romantic-quotes {
+            font-style: italic;
+            color: #6c757d;
+            margin: 15px 0;
+            padding: 15px;
+            border-left: 4px solid #ff6b6b;
+            background: rgba(255, 182, 193, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hearts" id="hearts"></div>
+
+    <div class="container">
+        <h1>💕 Love Chess 💕</h1>
+        <p class="subtitle">A romantic chess game made with love</p>
+
+        <div class="love-message">
+            "Every move in this game represents a step closer to your heart, my love."
+        </div>
+
+        <div class="romantic-quotes">
+            "Distance means nothing when love means everything. Let's play across the miles."
+        </div>
+
+        <form id="gameForm">
+            <div class="form-group">
+                <label for="playerName">Your Beautiful Name:</label>
+                <input type="text" id="playerName" name="playerName" required placeholder="Enter your name...">
+            </div>
+
+            <div class="form-group">
+                <label for="gameId">Game Room ID:</label>
+                <input type="text" id="gameId" name="gameId" required placeholder="Enter game room ID...">
+            </div>
+
+            <div class="game-mode">
+                <button type="button" class="mode-btn active" id="joinMode">Join Game</button>
+                <button type="button" class="mode-btn" id="createMode">Create Game</button>
+            </div>
+
+            <button type="submit" class="btn">🎮 Start Playing 🎮</button>
+        </form>
+
+        <div class="romantic-quotes">
+            "In every game, in every move, I see the reflection of our love story"
+        </div>
+    </div>
+
+    <script>
+        // Create floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.innerHTML = '💕';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDelay = Math.random() * 10 + 's';
+            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            document.getElementById('hearts').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 20000);
+        }
+
+        // Create hearts periodically
+        setInterval(createHeart, 500);
+
+        // Game mode selection
+        document.getElementById('joinMode').addEventListener('click', function () {
+            document.getElementById('joinMode').classList.add('active');
+            document.getElementById('createMode').classList.remove('active');
+        });
+
+        document.getElementById('createMode').addEventListener('click', function () {
+            document.getElementById('createMode').classList.add('active');
+            document.getElementById('joinMode').classList.remove('active');
+
+            // Generate random game ID
+            const gameId = 'love-' + Math.random().toString(36).substr(2, 9);
+            document.getElementById('gameId').value = gameId;
+        });
+
+        // Form submission
+        document.getElementById('gameForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const playerName = document.getElementById('playerName').value;
+            const gameId = document.getElementById('gameId').value;
+
+            if (playerName && gameId) {
+                window.location.href = `/game/${gameId}?name=${encodeURIComponent(playerName)}`;
+            }
+        });
+
+        // Add some romantic quotes rotation
+        const quotes = [
+            "Distance means nothing when love means everything. Let's play across the miles.",
+            "In every game, in every move, I see the reflection of our love story",
+            "Playing chess with you is like dancing with my heart",
+            "Every piece on this board represents a reason why I love you",
+            "Win or lose, with you every game is a victory of love"
+        ];
+
+        let quoteIndex = 0;
+        const quoteElements = document.querySelectorAll('.romantic-quotes');
+
+        setInterval(() => {
+            quoteIndex = (quoteIndex + 1) % quotes.length;
+            quoteElements.forEach(element => {
+                element.style.opacity = '0';
+                setTimeout(() => {
+                    element.textContent = `"${quotes[quoteIndex]}"`;
+                    element.style.opacity = '1';
+                }, 500);
+            });
+        }, 5000);
+    </script>
+</body>
+
+</html>
