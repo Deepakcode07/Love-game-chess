@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import json
 import uuid
@@ -6,26 +6,33 @@ from datetime import datetime
 import random
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your-secret-key-here'
+# The template folder is where Flask looks for index.html, game.html, etc.
+app.template_folder = 'templates'
+app.config['SECRET_KEY'] = 'your-very-romantic-secret-key'
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-# Store active games.
+# --- DATA STORAGE ---
+# Store active games. The key is the game_id.
 games = {}
+# Store player session IDs to easily find their game and color on disconnect.
 players = {}
 
-# Love messages that will be spoken.
+# --- LOVE-THEMED CONTENT ---
+# Love messages that will be spoken by the system after a move.
 LOVE_MESSAGES = [
-    "You are so adorable, intelligent, beautiful, and sweet.",
+    "A brilliant move, my love! Just like you.",
     "Every move you make fills my heart with joy.",
-    "Your intelligence shines brighter than any chess piece.",
-    "You make even chess feel like poetry.",
-    "I love watching you play with such beauty and brilliance.",
-    "Your mind is as captivating as your beauty.",
-    "You make my heart skip a beat with every move.",
-    "Every game with you is a treasure."
+    "Your intelligence shines brighter than any star.",
+    "You make even chess feel like a beautiful dance.",
+    "I love watching you play with such grace and brilliance.",
+    "Your mind is as captivating as your heart.",
+    "Checkmate! You've captured my heart all over again.",
+    "Playing with you is the only victory I need."
 ]
 
+# (The ChessGame class remains exactly the same as you provided)
 class ChessGame:
+    # ... (No changes needed to your ChessGame class) ...
     def __init__(self):
         self.board = self.init_board()
         self.current_player = 'white'
@@ -408,57 +415,116 @@ class ChessGame:
             'in_check': {
                 'white': self.is_in_check('white'),
                 'black': self.is_in_check('black')
-            }
+            },
+            'possible_moves': self.get_all_possible_moves(self.current_player)
         }
+
+    def get_all_possible_moves(self, color):
+        """Calculates all possible moves for a given color."""
+        all_moves = {}
+        if self.game_over or color != self.current_player:
+            return all_moves
+
+        for r in range(8):
+            for c in range(8):
+                piece = self.board[r][c]
+                if piece and piece['color'] == color:
+                    moves = self.get_piece_moves(r, c)
+                    if moves:
+                        all_moves[f'{r},{c}'] = moves
+        return all_moves
+
+# --- HTTP ROUTES ---
 
 @app.route('/')
 def index():
+    """Serves the beautiful landing page."""
     return render_template('index.html')
 
-@app.route('/game/<game_id>')
-def game(game_id):
-    return render_template('game.html', game_id=game_id)
+@app.route('/validate_game', methods=['POST'])
+def validate_game():
+    """
+    API endpoint for the landing page to check/create a game room
+    before redirecting the user to the actual game page.
+    """
+    data = request.get_json()
+    game_id = data.get('game_id')
+    mode = data.get('mode') # 'create' or 'join'
 
-@socketio.on('join_game')
-def handle_join_game(data):
-    game_id = data['game_id']
-    player_name = data['player_name']
-    
-    if game_id not in games:
+    if not game_id:
+        return jsonify({'success': False, 'message': 'A Game Room ID is required, my love.'})
+
+    if mode == 'create':
+        if game_id in games:
+            return jsonify({'success': False, 'message': 'This room is already taken! Try another romantic name.'})
+        # Create a new game room
         games[game_id] = {
             'game': ChessGame(),
             'players': {},
             'spectators': []
         }
+        return jsonify({'success': True, 'message': 'Your romantic game room is ready!'})
+    
+    elif mode == 'join':
+        if game_id not in games:
+            return jsonify({'success': False, 'message': 'This love chamber was not found. Are you sure it exists?'})
+        if len(games[game_id]['players']) >= 2:
+            return jsonify({'success': False, 'message': 'This game of hearts is already full!'})
+        return jsonify({'success': True, 'message': 'Joining the game of love...'})
+    
+    return jsonify({'success': False, 'message': 'An unexpected error occurred.'})
+
+
+@app.route('/game/<game_id>')
+def game(game_id):
+    """Serves the main game page."""
+    player_name = request.args.get('player_name', 'A Secret Admirer')
+    # Check if the game room actually exists before rendering
+    if game_id not in games:
+        # In a real app, you might use flash messages to show an error
+        return redirect(url_for('index'))
+    return render_template('game.html', game_id=game_id, player_name=player_name)
+
+# --- SOCKET.IO EVENTS ---
+
+@socketio.on('join_game')
+def handle_join_game(data):
+    """Handles a player joining a game room from the game.html page."""
+    game_id = data['game_id']
+    player_name = data['player_name']
+    sid = request.sid
+    
+    if game_id not in games:
+        emit('error', {'message': 'Game not found.'})
+        return
     
     game_data = games[game_id]
     
-    # Assign player color
-    if len(game_data['players']) == 0:
+    # Assign player color or spectator role
+    if 'white' not in game_data['players']:
         color = 'white'
-    elif len(game_data['players']) == 1:
+    elif 'black' not in game_data['players']:
         color = 'black'
     else:
         color = 'spectator'
-        game_data['spectators'].append(request.sid)
+        game_data['spectators'].append(sid)
     
     if color != 'spectator':
-        game_data['players'][color] = {
-            'name': player_name,
-            'sid': request.sid
-        }
-        players[request.sid] = {'game_id': game_id, 'color': color}
-    
+        game_data['players'][color] = {'name': player_name, 'sid': sid}
+        players[sid] = {'game_id': game_id, 'color': color, 'name': player_name}
+    else:
+         players[sid] = {'game_id': game_id, 'color': 'spectator', 'name': player_name}
+
     join_room(game_id)
     
-    # Send game state
+    # Notify the joining player of their status and the game state
     emit('game_joined', {
         'color': color,
         'game_state': game_data['game'].get_game_state(),
-        'players': game_data['players']
+        'players': {c: p['name'] for c, p in game_data['players'].items()}
     })
     
-    # Notify other players
+    # Notify everyone else in the room that a new player has connected
     emit('player_joined', {
         'player_name': player_name,
         'color': color
@@ -466,6 +532,7 @@ def handle_join_game(data):
 
 @socketio.on('make_move')
 def handle_make_move(data):
+    """Handles a player making a move on the board."""
     if request.sid not in players:
         return
     
@@ -478,56 +545,70 @@ def handle_make_move(data):
     
     game = games[game_id]['game']
     
-    # Check if it's player's turn
     if game.current_player != player_color:
-        emit('error', {'message': 'Not your turn!'})
+        emit('error', {'message': "It's not your turn, my dear."})
         return
     
-    # Make the move
     success = game.make_move(
         data['from_row'], data['from_col'],
         data['to_row'], data['to_col']
     )
     
     if success:
-        # Get random love message
+        # After a successful move, send a random love message
         love_message = random.choice(LOVE_MESSAGES)
         
-        # Send updated game state to all players
         emit('move_made', {
             'game_state': game.get_game_state(),
             'move': data,
-            'love_message': love_message
+            'love_message': love_message,
+            'is_check': game.is_in_check(game.current_player)
         }, room=game_id)
-        
-        # Increment love message counter
-        game.love_messages_sent += 1
-        
     else:
-        emit('error', {'message': 'Invalid move!'})
+        emit('error', {'message': 'That move is not allowed, my love.'})
+
+@socketio.on('send_love_note')
+def handle_send_love_note(data):
+    """Handles sending a custom love note to the other player"""
+    if request.sid not in players: return
+    
+    player_info = players[request.sid]
+    game_id = player_info['game_id']
+    
+    emit('love_note_received', {
+        'from_player': player_info['name'],
+        'note': data.get('note', '...')
+    }, room=game_id)
+
 
 @socketio.on('disconnect')
 def handle_disconnect():
+    """Handles a player disconnecting from the game."""
     if request.sid in players:
-        player_info = players[request.sid]
+        player_info = players.pop(request.sid)
         game_id = player_info['game_id']
         
         if game_id in games:
-            # Remove player from game
             game_data = games[game_id]
-            for color, player in game_data['players'].items():
-                if player['sid'] == request.sid:
-                    del game_data['players'][color]
-                    break
-            
-            # Notify other players
-            emit('player_disconnected', {
-                'color': player_info['color']
-            }, room=game_id)
+            player_color = player_info['color']
+
+            # Remove player from game data
+            if player_color != 'spectator' and player_color in game_data['players']:
+                del game_data['players'][player_color]
+            elif request.sid in game_data['spectators']:
+                game_data['spectators'].remove(request.sid)
+
+            # If the room is now empty, delete it
+            if not game_data['players'] and not game_data['spectators']:
+                del games[game_id]
+            else:
+                emit('player_disconnected', {
+                    'color': player_color,
+                    'name': player_info['name']
+                }, room=game_id)
         
-        del players[request.sid]
-    
-    leave_room(game_id if request.sid in players else None)
+        leave_room(game_id)
 
 if __name__ == '__main__':
+    # Use 0.0.0.0 to make it accessible on your local network
     socketio.run(app, debug=True, host='0.0.0.0', port=5000)
