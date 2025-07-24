@@ -4,12 +4,20 @@ import json
 import uuid
 from datetime import datetime
 import random
+import os
 
 app = Flask(__name__)
-# The template folder is where Flask looks for index.html, game.html, etc.
 app.template_folder = 'templates'
 app.config['SECRET_KEY'] = 'your-very-romantic-secret-key'
-socketio = SocketIO(app, cors_allowed_origins="*")
+
+# --- Socket.IO Setup for Production ---
+# Use a Redis message queue if the REDIS_URL is available (for production on Render)
+redis_url = os.environ.get('REDIS_URL')
+if redis_url:
+    socketio = SocketIO(app, message_queue=redis_url, cors_allowed_origins="*")
+else:
+    # Fallback for local development without Redis
+    socketio = SocketIO(app, cors_allowed_origins="*")
 
 # --- DATA STORAGE ---
 # Store active games. The key is the game_id.
