@@ -569,7 +569,7 @@ def handle_make_move(data):
 
 @socketio.on('send_love_note')
 def handle_send_love_note(data):
-    """Handles sending a custom love note to the other player."""
+    """Handles sending a custom love note to the other player"""
     if request.sid not in players: return
     
     player_info = players[request.sid]
