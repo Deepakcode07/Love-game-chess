@@ -4,25 +4,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Love Chess - A Gift for My Heart</title>
+    <title>💕 Love Chess - Where Hearts Meet Strategy 💕</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Dancing+Script:wght@400;700&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffa8a8);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
+        :root {
+            --primary-pink: #ff6b9d;
+            --secondary-pink: #ff8fab;
+            --accent-purple: #c44569;
+            --soft-lavender: #f8e8ff;
+            --gold: #ffd700;
+            --white: #ffffff;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-love: linear-gradient(45deg, #ff6b9d, #ff8fab, #c44569, #764ba2);
+            --shadow-love: 0 20px 60px rgba(255, 107, 157, 0.3);
+            --border-radius: 20px;
         }
 
-        .hearts {
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Magical Background Elements */
+        .magic-bg {
             position: fixed;
             top: 0;
             left: 0;
@@ -30,287 +62,1005 @@
             height: 100%;
             pointer-events: none;
             z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-hearts,
+        .love-particles,
+        .sparkles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .heart,
+        .particle,
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+            user-select: none;
         }
 
         .heart {
-            position: absolute;
-            font-size: 20px;
-            color: rgba(255, 255, 255, 0.3);
-            animation: float 10s infinite linear;
+            font-size: clamp(16px, 3vw, 30px);
+            animation: heartFloat 12s infinite linear;
+            opacity: 0;
         }
 
-        @keyframes float {
+        @keyframes heartFloat {
             0% {
-                transform: translateY(100vh) rotate(0deg);
+                transform: translateY(100vh) rotate(0deg) scale(0);
                 opacity: 0;
             }
 
             10% {
-                opacity: 1;
+                opacity: 0.8;
+                transform: scale(1);
             }
 
             90% {
-                opacity: 1;
+                opacity: 0.8;
             }
 
             100% {
-                transform: translateY(-100px) rotate(360deg);
+                transform: translateY(-200px) rotate(360deg) scale(0);
                 opacity: 0;
             }
         }
 
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            position: relative;
-            z-index: 2;
-            backdrop-filter: blur(10px);
+        .particle {
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, #ff6b9d, transparent);
+            border-radius: 50%;
+            animation: particleFloat 8s infinite;
         }
 
-        h1 {
-            color: #d63384;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        @keyframes particleFloat {
+            0% {
+                transform: translate(0, 100vh) scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            100% {
+                transform: translate(20px, -200px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .sparkle {
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: sparkleAnimation 3s infinite;
+        }
+
+        @keyframes sparkleAnimation {
+
+            0%,
+            100% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        /* Main Container */
+        .main-container {
+            position: relative;
+            z-index: 10;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(20px, 5vw, 60px);
+        }
+
+        .love-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--border-radius);
+            padding: clamp(30px, 6vw, 60px);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--shadow-love);
+            position: relative;
+            overflow: hidden;
+            animation: cardPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes cardPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        .love-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: var(--gradient-love);
+            border-radius: var(--border-radius);
+            z-index: -1;
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 200% 50%;
+            }
+        }
+
+        /* Typography */
+        .main-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            background: var(--gradient-2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            animation: titleGlow 2s ease-in-out infinite alternate;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+        }
+
+        @keyframes titleGlow {
+            from {
+                filter: brightness(1);
+            }
+
+            to {
+                filter: brightness(1.2);
+            }
         }
 
         .subtitle {
-            color: #6c757d;
-            font-size: 1.2em;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #495057;
-            font-weight: bold;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ffc0cb;
-            border-radius: 10px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #ff6b6b;
-        }
-
-        .btn {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            margin: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            color: var(--white);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .love-message {
-            background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-            color: white;
-            padding: 20px;
+            background: var(--gradient-2);
+            color: var(--white);
+            padding: clamp(15px, 4vw, 25px);
             border-radius: 15px;
-            margin: 20px 0;
-            font-size: 18px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            margin: 2rem 0;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+            animation: messageFloat 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
         }
 
-        .features {
-            text-align: left;
-            margin: 20px 0;
-            padding: 20px;
-            background: rgba(255, 182, 193, 0.2);
+        @keyframes messageFloat {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .love-message::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: messageShine 3s infinite;
+        }
+
+        @keyframes messageShine {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        /* Form Styles */
+        .form-container {
+            margin: 2rem 0;
+        }
+
+        .form-group {
+            margin-bottom: clamp(20px, 4vw, 30px);
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--white);
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: clamp(15px, 3vw, 20px);
+            border: none;
             border-radius: 15px;
+            font-size: clamp(1rem, 2.5vw, 1.1rem);
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
         }
 
-        .features h3 {
-            color: #d63384;
-            margin-bottom: 15px;
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
         }
 
-        .features ul {
-            list-style: none;
-            padding: 0;
+        .form-input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+            border: 2px solid var(--gold);
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
         }
 
-        .features li {
-            padding: 5px 0;
-            color: #495057;
-        }
-
-        .features li:before {
-            content: "💕 ";
-            margin-right: 10px;
-        }
-
-        .game-mode {
-            display: flex;
-            justify-content: space-around;
-            margin: 20px 0;
+        /* Button Styles */
+        .game-modes {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 2rem 0;
         }
 
         .mode-btn {
-            background: rgba(255, 107, 107, 0.1);
-            border: 2px solid #ff6b6b;
-            color: #d63384;
-            padding: 10px 20px;
-            border-radius: 15px;
+            padding: clamp(12px, 3vw, 18px);
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-2);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .mode-btn:hover::before,
+        .mode-btn.active::before {
+            left: 0;
         }
 
         .mode-btn:hover,
         .mode-btn.active {
-            background: #ff6b6b;
-            color: white;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.4);
+            border-color: var(--gold);
         }
 
-        .romantic-quotes {
+        .primary-btn {
+            background: var(--gradient-2);
+            color: var(--white);
+            padding: clamp(18px, 4vw, 25px) clamp(30px, 6vw, 50px);
+            border: none;
+            border-radius: 25px;
+            font-size: clamp(1.1rem, 3vw, 1.4rem);
+            font-weight: 700;
+            cursor: pointer;
+            margin: 2rem 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow-love);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .primary-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .primary-btn:hover::before {
+            left: 100%;
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(255, 107, 157, 0.5);
+        }
+
+        .primary-btn:active {
+            transform: translateY(-2px) scale(1.02);
+        }
+
+        /* Quote Carousel */
+        .quote-carousel {
+            margin: 2rem 0;
+            height: 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quote {
+            position: absolute;
+            width: 100%;
             font-style: italic;
-            color: #6c757d;
-            margin: 15px 0;
-            padding: 15px;
-            border-left: 4px solid #ff6b6b;
-            background: rgba(255, 182, 193, 0.1);
+            color: rgba(255, 255, 255, 0.9);
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            text-align: center;
+            opacity: 0;
+            transition: all 0.8s ease;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(5px);
+        }
+
+        .quote.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Features Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 2rem 0;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .feature-item:hover {
+            transform: translateY(-5px) scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(255, 107, 157, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .feature-text {
+            color: var(--white);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Heart Rain Effect */
+        .heart-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .love-card {
+                margin: 10px;
+                padding: clamp(20px, 5vw, 30px);
+            }
+
+            .game-modes {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .quote-carousel {
+                height: 100px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 10px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Success Animation */
+        .success-animation {
+            animation: successPulse 0.6s ease-in-out;
+        }
+
+        @keyframes successPulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Hover Effects for Interactive Elements */
+        .interactive:hover {
+            cursor: pointer;
+            animation: bounce 0.5s ease-in-out;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="hearts" id="hearts"></div>
+    <!-- Magical Background -->
+    <div class="magic-bg">
+        <div class="floating-hearts" id="floating-hearts"></div>
+        <div class="love-particles" id="love-particles"></div>
+        <div class="sparkles" id="sparkles"></div>
+    </div>
 
-    <div class="container">
-        <h1>💕 Love Chess 💕</h1>
-        <p class="subtitle">A romantic chess game made with love</p>
+    <!-- Heart Rain Effect -->
+    <div class="heart-rain" id="heart-rain"></div>
 
-        <div class="love-message">
-            "Every move in this game represents a step closer to your heart, my love."
-        </div>
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="love-card">
+            <h1 class="main-title">💕 Love Chess 💕</h1>
+            <p class="subtitle">Where hearts meet strategy in perfect harmony</p>
 
-        <div class="romantic-quotes">
-            "Distance means nothing when love means everything. Let's play across the miles."
-        </div>
-
-        <form id="gameForm">
-            <div class="form-group">
-                <label for="playerName">Your Beautiful Name:</label>
-                <input type="text" id="playerName" name="playerName" required placeholder="Enter your name...">
+            <div class="love-message interactive">
+                <span id="dynamic-message">"Every move in this game represents a step closer to your heart, my
+                    love."</span>
             </div>
 
-            <div class="form-group">
-                <label for="gameId">Game Room ID:</label>
-                <input type="text" id="gameId" name="gameId" required placeholder="Enter game room ID...">
+            <!-- Features Grid -->
+            <div class="features-grid">
+                <div class="feature-item interactive">
+                    <span class="feature-icon">🎮</span>
+                    <span class="feature-text">Real-time Play</span>
+                </div>
+                <div class="feature-item interactive">
+                    <span class="feature-icon">💝</span>
+                    <span class="feature-text">Couple Mode</span>
+                </div>
+                <div class="feature-item interactive">
+                    <span class="feature-icon">🌟</span>
+                    <span class="feature-text">Love Rewards</span>
+                </div>
+                <div class="feature-item interactive">
+                    <span class="feature-icon">💌</span>
+                    <span class="feature-text">Love Notes</span>
+                </div>
             </div>
 
-            <div class="game-mode">
-                <button type="button" class="mode-btn active" id="joinMode">Join Game</button>
-                <button type="button" class="mode-btn" id="createMode">Create Game</button>
+            <!-- Game Form -->
+            <form id="love-chess-form" class="form-container">
+                <div class="form-group">
+                    <label class="form-label" for="player-name">
+                        💖 Your Beautiful Name:
+                    </label>
+                    <input type="text" id="player-name" class="form-input" required
+                        placeholder="Enter your lovely name..." autocomplete="name">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="game-id">
+                        🎯 Game Room ID:
+                    </label>
+                    <input type="text" id="game-id" class="form-input" required
+                        placeholder="Enter or create game room..." autocomplete="off">
+                </div>
+
+                <!-- Game Mode Selection -->
+                <div class="game-modes">
+                    <button type="button" class="mode-btn active" id="join-mode">
+                        💕 Join Game
+                    </button>
+                    <button type="button" class="mode-btn" id="create-mode">
+                        ✨ Create Game
+                    </button>
+                </div>
+
+                <!-- Primary Action Button -->
+                <button type="submit" class="primary-btn" id="start-btn">
+                    <span id="btn-text">🚀 Start Playing Together 🚀</span>
+                    <div class="loading" id="loading" style="display: none;"></div>
+                </button>
+            </form>
+
+            <!-- Quote Carousel -->
+            <div class="quote-carousel">
+                <div class="quote active">"Distance means nothing when love means everything. Let's play across the
+                    miles."</div>
+                <div class="quote">"In every game, in every move, I see the reflection of our love story."</div>
+                <div class="quote">"Playing chess with you is like dancing with my heart."</div>
+                <div class="quote">"Every piece on this board represents a reason why I love you."</div>
+                <div class="quote">"Win or lose, with you every game is a victory of love."</div>
+                <div class="quote">"Our love story unfolds with every strategic move we make together."</div>
             </div>
-
-            <button type="submit" class="btn">🎮 Start Playing 🎮</button>
-        </form>
-
-        <div class="romantic-quotes">
-            "In every game, in every move, I see the reflection of our love story"
         </div>
     </div>
 
     <script>
-        // Create floating hearts
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = '💕';
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDelay = Math.random() * 10 + 's';
-            heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
-            document.getElementById('hearts').appendChild(heart);
+        // Enhanced Animation System
+        class LoveChessAnimations {
+            constructor() {
+                this.quotes = document.querySelectorAll('.quote');
+                this.currentQuote = 0;
+                this.heartEmojis = ['💕', '💖', '💝', '💗', '💘', '💟', '❤️', '🧡', '💛', '💚', '💙', '💜'];
+                this.sparkleEmojis = ['✨', '⭐', '🌟', '💫', '⚡'];
+                this.init();
+            }
 
-            setTimeout(() => {
-                heart.remove();
-            }, 20000);
+            init() {
+                this.createFloatingHearts();
+                this.createLoveParticles();
+                this.createSparkles();
+                this.startHeartRain();
+                this.rotateQuotes();
+                this.setupFormAnimations();
+                this.setupModeButtons();
+                this.setupInteractiveElements();
+            }
+
+            createFloatingHearts() {
+                const heartsContainer = document.getElementById('floating-hearts');
+
+                setInterval(() => {
+                    if (Math.random() > 0.7) { // 30% chance every interval
+                        const heart = document.createElement('div');
+                        heart.className = 'heart';
+                        heart.innerHTML = this.heartEmojis[Math.floor(Math.random() * this.heartEmojis.length)];
+                        heart.style.left = Math.random() * 100 + '%';
+                        heart.style.animationDelay = '0s';
+                        heart.style.animationDuration = (Math.random() * 8 + 8) + 's';
+                        heart.style.fontSize = (Math.random() * 15 + 20) + 'px';
+
+                        heartsContainer.appendChild(heart);
+
+                        setTimeout(() => {
+                            if (heart.parentNode) {
+                                heart.remove();
+                            }
+                        }, 16000);
+                    }
+                }, 800);
+            }
+
+            createLoveParticles() {
+                const particlesContainer = document.getElementById('love-particles');
+
+                setInterval(() => {
+                    for (let i = 0; i < 3; i++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'particle';
+                        particle.style.left = Math.random() * 100 + '%';
+                        particle.style.animationDelay = Math.random() * 2 + 's';
+                        particle.style.animationDuration = (Math.random() * 6 + 6) + 's';
+
+                        particlesContainer.appendChild(particle);
+
+                        setTimeout(() => {
+                            if (particle.parentNode) {
+                                particle.remove();
+                            }
+                        }, 12000);
+                    }
+                }, 2000);
+            }
+
+            createSparkles() {
+                const sparklesContainer = document.getElementById('sparkles');
+
+                setInterval(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'sparkle';
+                    sparkle.style.left = Math.random() * 100 + '%';
+                    sparkle.style.top = Math.random() * 100 + '%';
+                    sparkle.style.animationDelay = Math.random() * 2 + 's';
+
+                    sparklesContainer.appendChild(sparkle);
+
+                    setTimeout(() => {
+                        if (sparkle.parentNode) {
+                            sparkle.remove();
+                        }
+                    }, 3000);
+                }, 1500);
+            }
+
+            startHeartRain() {
+                const heartRain = document.getElementById('heart-rain');
+                let isRaining = false;
+
+                // Trigger heart rain on special interactions
+                document.addEventListener('click', (e) => {
+                    if (!isRaining && Math.random() > 0.7) {
+                        isRaining = true;
+                        this.createHeartRain(heartRain, e.clientX, e.clientY);
+                        setTimeout(() => { isRaining = false; }, 3000);
+                    }
+                });
+            }
+
+            createHeartRain(container, x, y) {
+                for (let i = 0; i < 15; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.innerHTML = this.heartEmojis[Math.floor(Math.random() * this.heartEmojis.length)];
+                        heart.style.position = 'absolute';
+                        heart.style.left = (x - 50 + Math.random() * 100) + 'px';
+                        heart.style.top = (y - 50 + Math.random() * 100) + 'px';
+                        heart.style.fontSize = (Math.random() * 10 + 20) + 'px';
+                        heart.style.color = `hsl(${Math.random() * 60 + 300}, 70%, 70%)`;
+                        heart.style.pointerEvents = 'none';
+                        heart.style.animation = 'heartExplode 2s ease-out forwards';
+
+                        container.appendChild(heart);
+
+                        setTimeout(() => {
+                            if (heart.parentNode) {
+                                heart.remove();
+                            }
+                        }, 2000);
+                    }, i * 100);
+                }
+            }
+
+            rotateQuotes() {
+                setInterval(() => {
+                    this.quotes[this.currentQuote].classList.remove('active');
+                    this.currentQuote = (this.currentQuote + 1) % this.quotes.length;
+                    this.quotes[this.currentQuote].classList.add('active');
+                }, 5000);
+            }
+
+            setupFormAnimations() {
+                const inputs = document.querySelectorAll('.form-input');
+
+                inputs.forEach(input => {
+                    input.addEventListener('focus', () => {
+                        input.parentElement.style.transform = 'scale(1.02)';
+                        input.parentElement.style.transition = 'transform 0.3s ease';
+                    });
+
+                    input.addEventListener('blur', () => {
+                        input.parentElement.style.transform = 'scale(1)';
+                    });
+                });
+            }
+
+            setupModeButtons() {
+                const joinBtn = document.getElementById('join-mode');
+                const createBtn = document.getElementById('create-mode');
+                const gameIdInput = document.getElementById('game-id');
+
+                joinBtn.addEventListener('click', () => {
+                    joinBtn.classList.add('active');
+                    createBtn.classList.remove('active');
+                    gameIdInput.placeholder = 'Enter existing game room ID...';
+                    gameIdInput.value = '';
+                });
+
+                createBtn.addEventListener('click', () => {
+                    createBtn.classList.add('active');
+                    joinBtn.classList.remove('active');
+                    gameIdInput.placeholder = 'Generating romantic room...';
+
+                    // Generate romantic game ID
+                    const romanticWords = ['love', 'heart', 'rose', 'kiss', 'dream', 'angel', 'honey', 'sweet'];
+                    const randomWord = romanticWords[Math.floor(Math.random() * romanticWords.length)];
+                    const randomNum = Math.floor(Math.random() * 9999) + 1000;
+                    const gameId = `${randomWord}-${randomNum}`;
+
+                    setTimeout(() => {
+                        gameIdInput.value = gameId;
+                        gameIdInput.placeholder = 'Your romantic room is ready!';
+                    }, 1000);
+                });
+            }
+
+            setupInteractiveElements() {
+                const interactiveElements = document.querySelectorAll('.interactive');
+
+                interactiveElements.forEach(element => {
+                    element.addEventListener('mouseenter', () => {
+                        element.style.transform = 'scale(1.05)';
+                        element.style.transition = 'transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    });
+
+                    element.addEventListener('mouseleave', () => {
+                        element.style.transform = 'scale(1)';
+                    });
+                });
+            }
         }
 
-        // Create hearts periodically
-        setInterval(createHeart, 500);
-
-        // Game mode selection
-        document.getElementById('joinMode').addEventListener('click', function () {
-            document.getElementById('joinMode').classList.add('active');
-            document.getElementById('createMode').classList.remove('active');
-        });
-
-        document.getElementById('createMode').addEventListener('click', function () {
-            document.getElementById('createMode').classList.add('active');
-            document.getElementById('joinMode').classList.remove('active');
-
-            // Generate random game ID
-            const gameId = 'love-' + Math.random().toString(36).substr(2, 9);
-            document.getElementById('gameId').value = gameId;
-        });
-
-        // Form submission
-        document.getElementById('gameForm').addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const playerName = document.getElementById('playerName').value;
-            const gameId = document.getElementById('gameId').value;
-
-            if (playerName && gameId) {
-                window.location.href = `/game/${gameId}?name=${encodeURIComponent(playerName)}`;
+        // Form Submission Handler
+        class LoveChessForm {
+            constructor() {
+                this.form = document.getElementById('love-chess-form');
+                this.startBtn = document.getElementById('start-btn');
+                this.btnText = document.getElementById('btn-text');
+                this.loading = document.getElementById('loading');
+                this.setupFormSubmission();
             }
-        });
 
-        // Add some romantic quotes rotation
-        const quotes = [
-            "Distance means nothing when love means everything. Let's play across the miles.",
-            "In every game, in every move, I see the reflection of our love story",
-            "Playing chess with you is like dancing with my heart",
-            "Every piece on this board represents a reason why I love you",
-            "Win or lose, with you every game is a victory of love"
-        ];
+            setupFormSubmission() {
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleSubmission();
+                });
+            }
 
-        let quoteIndex = 0;
-        const quoteElements = document.querySelectorAll('.romantic-quotes');
+            async handleSubmission() {
+                const playerName = document.getElementById('player-name').value.trim();
+                const gameId = document.getElementById('game-id').value.trim();
 
-        setInterval(() => {
-            quoteIndex = (quoteIndex + 1) % quotes.length;
-            quoteElements.forEach(element => {
-                element.style.opacity = '0';
+                if (!playerName || !gameId) {
+                    this.showError('Please fill in all the love details! 💕');
+                    return;
+                }
+
+                // Start loading animation
+                this.btnText.style.display = 'none';
+                this.loading.style.display = 'inline-block';
+                this.startBtn.disabled = true;
+
+                // --- SIMULATED ASYNC OPERATION (like contacting a server) ---
+                try {
+                    const mode = document.getElementById('create-mode').classList.contains('active') ? 'create' : 'join';
+
+                    const response = await fetch('/validate_game', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            game_id: gameId,
+                            player_name: playerName,
+                            mode: mode
+                        }),
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // On success:
+                        this.loading.style.display = 'none';
+                        this.btnText.textContent = 'Connected! Let the love game begin ❤️';
+                        this.btnText.style.display = 'block';
+                        this.startBtn.classList.add('success-animation');
+
+                        const btnRect = this.startBtn.getBoundingClientRect();
+                        this.triggerCelebration(btnRect.left + btnRect.width / 2, btnRect.top + btnRect.height / 2);
+
+                        // Redirect to the game page after a short delay
+                        setTimeout(() => {
+                            window.location.href = `/game/${gameId}?player_name=${encodeURIComponent(playerName)}`;
+                        }, 1500);
+
+                    } else {
+                        // On failure from the server:
+                        this.showError(result.message || 'Something went wrong, my love.');
+                    }
+                } catch (error) {
+                    // On network error:
+                    this.showError('Could not connect to the love server. Please try again.');
+                    console.error('Validation Error:', error);
+                }
+            }
+
+            showError(message) {
+                const messageEl = document.getElementById('dynamic-message');
+                const originalText = messageEl.textContent;
+
+                // Show error message
+                messageEl.textContent = message;
+                messageEl.parentElement.style.background = 'linear-gradient(45deg, #ff4757, #ff6b81)';
+                messageEl.parentElement.style.animation = 'shake 0.5s ease-in-out';
+
+                // Revert after a few seconds
                 setTimeout(() => {
-                    element.textContent = `"${quotes[quoteIndex]}"`;
-                    element.style.opacity = '1';
-                }, 500);
-            });
-        }, 5000);
+                    messageEl.textContent = originalText;
+                    messageEl.parentElement.style.background = 'var(--gradient-2)';
+                    messageEl.parentElement.style.animation = 'messageFloat 3s ease-in-out infinite';
+                }, 3000);
+
+                // Reset button state
+                this.loading.style.display = 'none';
+                this.btnText.style.display = 'block';
+                this.startBtn.disabled = false;
+            }
+
+            // Method to trigger celebration effect, to be called from animation class
+            triggerCelebration(x, y) {
+                const heartRainContainer = document.getElementById('heart-rain');
+                // We'll borrow the heart rain logic for a concentrated explosion
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        heart.innerHTML = ['💕', '💖', '💝', '✨', '🌟'][Math.floor(Math.random() * 5)];
+                        heart.style.position = 'fixed'; // Use fixed to position relative to viewport
+                        heart.style.left = x + 'px';
+                        heart.style.top = y + 'px';
+                        heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                        heart.style.color = `hsl(${Math.random() * 60 + 300}, 90%, 70%)`;
+                        heart.style.pointerEvents = 'none';
+                        heart.style.zIndex = '100';
+                        heart.style.animation = 'celebrationExplode 1.5s ease-out forwards';
+
+                        document.body.appendChild(heart);
+
+                        setTimeout(() => heart.remove(), 1500);
+                    }, i * 20);
+                }
+            }
+        }
+
+        // --- Final Setup on DOM Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            new LoveChessAnimations();
+            new LoveChessForm();
+        });
     </script>
+
+    <!-- Add missing keyframes mentioned in JS for a complete experience -->
+    <style>
+        @keyframes heartExplode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(calc(var(--tx, 0) * 1px), calc(var(--ty, 0) * 1px)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        /* A more powerful celebration explosion */
+        @keyframes celebrationExplode {
+            0% {
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(calc(-50% + (var(--rand-x) - 0.5) * 400px), calc(-50% + (var(--rand-y) - 0.5) * 400px)) scale(0) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* For the error message shake effect */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-8px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(8px);
+            }
+        }
+
+        /* JS will set these CSS variables for the explosion */
+        .celebration-heart {
+            --rand-x: 0;
+            --rand-y: 0;
+        }
+    </style>
 </body>
 
 </html>
